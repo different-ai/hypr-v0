@@ -6,7 +6,7 @@ hyprsqrl is an app to eventually automate all mundane tasks away. It connects to
 
 ## Philosophy
 
-hypsqrl is built on the notion of **eventually invisible softare** it is meant to be less and less present in your life if it does its job well. It will take a while to get there but we believe the best productivity app is the one you do not need spend time on.
+hyprsqrl is built on the notion of **eventually invisible software** it is meant to be less and less present in your life if it does its job well. It will take a while to get there but we believe the best productivity app is the one you do not need spend time on.
 
 ## Agents
 -  [x] Automatically create tasks in Obsidian based on screen activity
