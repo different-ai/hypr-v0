@@ -9,6 +9,7 @@ import {
   primaryKey,
   foreignKey,
   boolean,
+  vector,
 } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('User', {
@@ -111,5 +112,22 @@ export const suggestion = pgTable(
     }),
   }),
 );
+
+export const ocrData = pgTable('OCRData', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  createdAt: timestamp('createdAt').notNull(),
+  frameId: text('frameId').notNull(),
+  appName: text('appName'),
+  windowName: text('windowName'),
+  ocrText: text('ocrText').notNull(),
+  tsv_content: vector('tsv_content', { dimensions: 1536 }).notNull(),
+  metadata: json('metadata'),
+  userId: uuid('userId')
+    .notNull()
+    .references(() => user.id),
+});
+
+export type OCRData = InferSelectModel<typeof ocrData>;
+
 
 export type Suggestion = InferSelectModel<typeof suggestion>;

@@ -15,6 +15,8 @@ import {
   type Message,
   message,
   vote,
+  ocrData,
+  type OCRData,
 } from './schema';
 import { ArtifactKind } from '@/components/artifact';
 
@@ -342,6 +344,43 @@ export async function updateChatVisiblityById({
     return await db.update(chat).set({ visibility }).where(eq(chat.id, chatId));
   } catch (error) {
     console.error('Failed to update chat visibility in database');
+    throw error;
+  }
+}
+
+export async function saveOCRData({ data }: { data: OCRData }) {
+  try {
+    return await db.insert(ocrData).values(data);
+  } catch (error) {
+    console.error('Failed to save OCR data in database');
+    throw error;
+  }
+}
+
+export async function getRecentOCRData({
+  userId,
+  minutes = 15,
+  limit = 5,
+}: {
+  userId: string;
+  minutes?: number;
+  limit?: number;
+}) {
+  try {
+    const startTime = new Date(Date.now() - minutes * 60 * 1000);
+    return await db
+      .select()
+      .from(ocrData)
+      .where(
+        and(
+          eq(ocrData.userId, userId),
+          gte(ocrData.createdAt, startTime)
+        )
+      )
+      .orderBy(desc(ocrData.createdAt))
+      .limit(limit);
+  } catch (error) {
+    console.error('Failed to get recent OCR data from database');
     throw error;
   }
 }
