@@ -3,6 +3,7 @@ import { getUserRequests, UserRequest } from '@/lib/request-network';
 import { getAuth, currentUser } from '@clerk/nextjs/server';
 import { userProfileService } from '@/lib/user-profile-service';
 import { userRequestService } from '@/lib/user-request-service';
+import { hasActiveSubscription } from '@/lib/auth';
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,6 +13,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
+      );
+    }
+    
+    // Check if the user has an active subscription
+    const isActive = await hasActiveSubscription(userId);
+    if (!isActive) {
+      return NextResponse.json(
+        { error: 'Subscription required' },
+        { status: 403 }
       );
     }
 

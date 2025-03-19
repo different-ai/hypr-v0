@@ -201,6 +201,43 @@ export class UserProfileService {
 
     return wallet.address;
   }
+
+  /**
+   * Updates a user's subscription status
+   */
+  async updateSubscriptionStatus(clerkId: string, status: 'active' | 'canceled'): Promise<UserProfile> {
+    const result = await db
+      .update(userProfilesTable)
+      .set({ 
+        subscriptionStatus: status, 
+        updatedAt: new Date() 
+      })
+      .where(eq(userProfilesTable.clerkId, clerkId))
+      .returning();
+
+    if (result.length === 0) {
+      throw new Error('Failed to update subscription status');
+    }
+
+    return result[0];
+  }
+
+  /**
+   * Checks if a user has an active subscription
+   */
+  async hasActiveSubscription(clerkId: string): Promise<boolean> {
+    const profiles = await db
+      .select()
+      .from(userProfilesTable)
+      .where(eq(userProfilesTable.clerkId, clerkId))
+      .limit(1);
+
+    if (profiles.length === 0) {
+      return false;
+    }
+
+    return profiles[0].subscriptionStatus === 'active';
+  }
 }
 
 export const userProfileService = new UserProfileService();

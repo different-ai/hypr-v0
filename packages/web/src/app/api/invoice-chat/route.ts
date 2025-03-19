@@ -2,6 +2,8 @@ import { NextRequest } from 'next/server';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { z } from 'zod';
+import { getAuth } from '@clerk/nextjs/server';
+import { hasActiveSubscription } from '@/lib/auth';
 
 import type {
   ScreenpipeSearchParams,
@@ -121,6 +123,24 @@ export const maxDuration = 30;
 
 export async function POST(req: NextRequest) {
   try {
+    // Get the authenticated user
+    const { userId } = getAuth(req);
+    if (!userId) {
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        { status: 401 }
+      );
+    }
+    
+    // Check if the user has an active subscription
+    const isActive = await hasActiveSubscription(userId);
+    if (!isActive) {
+      return new Response(
+        JSON.stringify({ error: 'Subscription required' }),
+        { status: 403 }
+      );
+    }
+    
     const { messages } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {

@@ -29,6 +29,7 @@ export const userProfilesTable = pgTable("user_profiles", {
   email: varchar("email", { length: 255 }).notNull(),
   defaultWalletId: uuid("default_wallet_id").references(() => userWalletsTable.id),
   hasCompletedOnboarding: boolean("has_completed_onboarding").default(false),
+  subscriptionStatus: varchar("subscription_status", { length: 20 }).notNull().default("active"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

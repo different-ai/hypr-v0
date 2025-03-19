@@ -1,12 +1,30 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuth } from '@clerk/nextjs/server';
+import { hasActiveSubscription } from '@/lib/auth';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // Parse the request as HandleUploadBody
     const body = await request.json() as HandleUploadBody;
     const { userId } = getAuth(request);
+    
+    // Check if user is authenticated
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+    
+    // Check if the user has an active subscription
+    const isActive = await hasActiveSubscription(userId);
+    if (!isActive) {
+      return NextResponse.json(
+        { error: 'Subscription required' },
+        { status: 403 }
+      );
+    }
 
     const jsonResponse = await handleUpload({
       body,
