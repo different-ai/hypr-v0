@@ -24,10 +24,20 @@ const companyProfileUpdateSchema = z.object({
   metadata: z.record(z.any()).optional().nullable(),
 });
 
+// correct to do params
+// export default async function Page({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>
+// }) {
+//   const { slug } = await params
+//   return <div>My Post: {slug}</div>
+// }
+
 // GET: Get a specific company profile
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate the user
@@ -55,7 +65,7 @@ export async function GET(
     }
 
     const companyProfile = await companyProfileService.getCompanyProfile(
-      params.id,
+      (await params).id,
       userProfile.id
     );
 
@@ -73,7 +83,7 @@ export async function GET(
 // PUT: Update a specific company profile
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate the user
@@ -102,7 +112,7 @@ export async function PUT(
 
     // Check if the company profile exists and belongs to the user
     const existingProfile = await companyProfileService.getCompanyProfile(
-      params.id,
+      (await params).id,
       userProfile.id
     );
 
@@ -116,7 +126,7 @@ export async function PUT(
 
     // Update the company profile
     const updatedProfile = await companyProfileService.updateCompanyProfile(
-      params.id,
+      (await params).id,
       userProfile.id,
       validatedData
     );
@@ -134,7 +144,7 @@ export async function PUT(
 // DELETE: Delete a specific company profile
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate the user
@@ -163,7 +173,7 @@ export async function DELETE(
 
     // Check if the company profile exists and belongs to the user
     const existingProfile = await companyProfileService.getCompanyProfile(
-      params.id,
+      (await params).id,
       userProfile.id
     );
 
@@ -184,7 +194,7 @@ export async function DELETE(
 
     // Delete the company profile
     const success = await companyProfileService.deleteCompanyProfile(
-      params.id,
+      (await params).id,
       userProfile.id
     );
 

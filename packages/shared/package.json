@@ -9,21 +9,21 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.0.0"
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
-    "@requestnetwork/epk-cipher": "^0.5.0",
-    "@requestnetwork/epk-signature": "^0.9.5",
-    "@requestnetwork/payment-processor": "^0.52.0",
-    "@requestnetwork/request-client.js": "^0.55.0",
-    "@requestnetwork/types": "^0.49.0",
-    "@requestnetwork/utils": "^0.49.0",
-    "@requestnetwork/web3-signature": "^0.8.5"
+    "@requestnetwork/epk-cipher": "catalog:request",
+    "@requestnetwork/epk-signature": "catalog:request",
+    "@requestnetwork/payment-processor": "catalog:request",
+    "@requestnetwork/request-client.js": "catalog:request",
+    "@requestnetwork/types": "catalog:request",
+    "@requestnetwork/utils": "catalog:request",
+    "@requestnetwork/web3-signature": "catalog:request"
   }
 }

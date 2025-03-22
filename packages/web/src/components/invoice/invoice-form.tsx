@@ -233,6 +233,7 @@ export const InvoiceForm = forwardRef(({ onSubmit, isSubmitting: externalIsSubmi
         },
         note: formData.note,
         terms: formData.terms,
+        currency: formData.currency, // Add the currency property from form data
         paymentType: formData.paymentType,
         bankDetails: formData.paymentType === 'fiat' ? formData.bankDetails : undefined,
       };
